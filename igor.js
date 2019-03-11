@@ -9,6 +9,11 @@ const logger = require('logops');
 // Массив котов. У каждого кота должно быть id, имя и возраст
 var cats = [];
 
+let port = process.argv[2];
+if (port === undefined) {
+    port = 8080;
+}
+
 const isCat = function (x) {
    return x.id && x.name && x.age;
 };
@@ -23,7 +28,7 @@ const searchIndexForID = function (id) {
       if (cats[i].id == id)
          index = i;
    return index;
-}
+};
 
 // Создание приложеия
 const app = express();
@@ -140,7 +145,7 @@ app.options('/', function (req, res) {
    res.send();
 });
 
-var server = app.listen(8080, function () {
+var server = app.listen(port, function () {
    var host = server.address().address;
    var port = server.address().port;
    console.log("Listening https://%s:%s", host, port);
