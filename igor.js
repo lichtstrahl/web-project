@@ -121,6 +121,8 @@ var deleteCat = function (req, res) {
 
 // GET - запрос на главную страницу
 app.get('/', functionHack);
+// GET - запрос на основную страницу
+app.get('/index', functionHack);
 // GET - зпрос на /hack
 app.get('/hack', functionIndex);
 // GET - запрос чтобы получить котов
