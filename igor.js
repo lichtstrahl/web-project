@@ -2,9 +2,10 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const app = express();
 const stdHead = {'Content-Type':'text/html'};
 const countRequest = 0;
+const expressLogging = require('express-logging');
+const logger = require('logops');
 // Массив котов. У каждого кота должно быть id, имя и возраст
 var cats = [];
 
@@ -24,8 +25,11 @@ const searchIndexForID = function (id) {
    return index;
 }
 
+// Создание приложеия
+const app = express();
 app.use(express.static('static'));
 app.use(bodyParser.json());
+app.use(expressLogging(logger));
 // Функция, которая отдаёт index.html
 var functionIndex = function (req, res) {
     fs.readFile('./static/html/index.html', 'utf8', function (err, data) {
