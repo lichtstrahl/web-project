@@ -4,6 +4,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "express-logging": "^1.1.1",
-    "logops": "^2.1.0"
+    "logops": "^2.1.0",
+    "https": "^1.0.0"
   }
 }

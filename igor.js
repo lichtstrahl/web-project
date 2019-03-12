@@ -1,13 +1,15 @@
 const express = require('express');
-const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const stdHead = {'Content-Type':'text/html'};
 const countRequest = 0;
 const expressLogging = require('express-logging');
 const logger = require('logops');
+const https = require('https');
+
 // Массив котов. У каждого кота должно быть id, имя и возраст
 var cats = [];
+
 
 let port = process.argv[2];
 if (port === undefined) {
@@ -35,6 +37,12 @@ const app = express();
 app.use(express.static('static'));
 app.use(bodyParser.json());
 app.use(expressLogging(logger));
+
+const httpsOptions = {
+  key: fs.readFileSync('/etc/ssl/private/nginx-selfsigned.key'),
+  cert: fs.readFileSync('/etc/ssl/certs/nginx-selfsigned.crt')
+};
+
 // Функция, которая отдаёт index.html
 var functionIndex = function (req, res) {
     fs.readFile('./static/html/index.html', 'utf8', function (err, data) {
@@ -145,10 +153,16 @@ app.options('/', function (req, res) {
    res.send();
 });
 
-var server = app.listen(port, function () {
-   var host = server.address().address;
-   var port = server.address().port;
-   console.log("Listening https://%s:%s", host, port);
+// var server = app.listen(port, function () {
+//    var host = server.address().address;
+//    var port = server.address().port;
+//    console.log("Listening http://%s:%s", host, port);
+// });
+
+const server = https.createServer(httpsOptions, app).listen(port, () => {
+       var host = server.address().address;
+       var port = server.address().port;
+       console.log("Listening https://%s:%s", host, port);
 });
 
 console.log("Server running ...");
